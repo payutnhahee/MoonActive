@@ -1,24 +1,21 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
-    root: { marginTop: 16, marginBottom: 16 },
-    // table: {
-    //     minWidth: 650,
-    //     //minHeight: 600,
-    // },
+    root: {
+        marginTop: 30, 
+        margin: 'auto',
+        minHeight: '90vh',
+        width: '90%',
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1)
+    },
     flexContainer: {
         display: "flex",
         alignItems: "center",
         boxSizing: "border-box",
     },
     table: {
-        // temporary right-to-left patch, waiting for
-        // https://github.com/bvaughn/react-virtualized/issues/454
-        "& .ReactVirtualized__Table__headerRow": {
-            flip: false,
-            paddingRight:
-                theme.direction === "rtl" ? "0 !important" : undefined,
-        },
+
     },
     tableRow: {
         cursor: "pointer",

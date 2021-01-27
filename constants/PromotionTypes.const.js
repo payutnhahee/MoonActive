@@ -1,7 +1,7 @@
 const PromotionTypes = Object.freeze({
-    Basic: 'basic',
-    Common: 'common',
-    Epic: 'epic'
+    Basic: 'Basic',
+    Common: 'Common',
+    Epic: 'Epic'
 });
 
 module.exports = {

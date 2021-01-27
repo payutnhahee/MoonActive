@@ -1,8 +1,8 @@
-import { getRandomDate } from '../temp/rows';
-import { GET_PROMOTIONS, UPDATE_PROMOTION, DELETE_PROMOTION, DUPLICATE_PROMOTION, PROMOTIONS_LOADING } from '../actions/actionTypes';
+import { GET_PROMOTIONS, UPDATE_PROMOTION, DELETE_PROMOTION, DUPLICATE_PROMOTION, PROMOTIONS_LOADING, GET_PROMOTIONS_COLUMNS } from '../actions/actionTypes';
  
 const initialState = {
     promotions: [],
+    columns: [],
     loading: false,
 };
 
@@ -32,7 +32,6 @@ export default function promotionReducer(state = initialState, action) {
         }
         case DUPLICATE_PROMOTION: {
             const { payload, index } = action;
-
             return {
                 ...state,
                 promotions: [...state.promotions.slice(0, index + 1), 
@@ -43,6 +42,12 @@ export default function promotionReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: true
+            }
+        }
+        case GET_PROMOTIONS_COLUMNS: {
+            return {
+                ...state,
+                columns: action.payload
             }
         }
         default: {

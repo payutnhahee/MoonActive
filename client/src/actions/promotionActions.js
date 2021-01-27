@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+    GET_PROMOTIONS_COLUMNS,
     GET_PROMOTIONS,
     UPDATE_PROMOTION,
     DELETE_PROMOTION,
@@ -7,16 +8,34 @@ import {
     PROMOTIONS_LOADING,
 } from "./actionTypes";
 
-import { addIds } from "../temp/convertId";
+const convertStringstoDates = (promotions) => {
+    return promotions.map((promotion) => {
+        promotion.startDate = new Date(promotion.startDate);
+        promotion.endDate = new Date(promotion.endDate);
+        return promotion;
+    })
+}
 
 export const getPromotions = () => async (dispatch) => {
     dispatch(setPromotionsLoading());
     try {
+        // TODO: pagination
         const { data } = await axios.get("/api/promotions");
-        dispatch({
+        return dispatch({
             type: GET_PROMOTIONS,
-            // TODO: delete addIds call
-            payload: addIds(data),
+            payload: data,
+        });
+    } catch (err) {
+        console.warn(err);
+    }
+};
+
+export const getColumns = () => async (dispatch) => {
+    try {
+        const { data } = await axios.get("/api/promotions/columns");
+        return dispatch({
+            type: GET_PROMOTIONS_COLUMNS,
+            payload: data,
         });
     } catch (err) {
         console.warn(err);
@@ -25,13 +44,13 @@ export const getPromotions = () => async (dispatch) => {
 
 export const updatePromotion = (updatedPromotion) => async (dispatch) => {
     try {
-        const updated = await axios.put(
+        const { data } = await axios.put(
             `/api/promotions/${updatedPromotion._id}`,
             updatedPromotion
         );
-        dispatch({
+        return dispatch({
             type: UPDATE_PROMOTION,
-            payload: updated,
+            payload: data,
         });
     } catch (err) {
         console.warn(err);
@@ -41,7 +60,7 @@ export const updatePromotion = (updatedPromotion) => async (dispatch) => {
 export const deletePromotion = (id) => async (dispatch) => {
     try {
         await axios.delete(`/api/promotions/${id}`);
-        dispatch({
+        return dispatch({
             type: DELETE_PROMOTION,
             payload: id,
         });
@@ -51,13 +70,13 @@ export const deletePromotion = (id) => async (dispatch) => {
 };
 
 export const duplicatePromotion = (promotion, index) => async (dispatch) => {
-    let duplicate = promotion;
+    let duplicate = {...promotion};
     delete duplicate._id;
     try {
-        const newPromotion = await axios.post(`/api/promotions`, duplicate);
-        dispatch({
+        const { data } = await axios.post(`/api/promotions`, duplicate);
+        return dispatch({
             type: DUPLICATE_PROMOTION,
-            payload: newPromotion,
+            payload: data,
             index: index,
         });
     } catch (err) {

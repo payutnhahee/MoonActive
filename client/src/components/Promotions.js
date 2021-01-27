@@ -1,58 +1,51 @@
-import React, { useState, useEffect, useCallback } from "react";
-// react virtualized
+import React, { useEffect } from "react";
+
 import VirtualizedTable from './VirtualizedTable/VirtualizedTable';
-// temp
-import { columns } from "../temp/columns";
-//import promotions from "../temp/rows";
-// redux
+
 import { useDispatch, useSelector } from "react-redux";
-import { getPromotions, deletePromotion } from "../actions/promotionActions";
-// style
+import { getColumns, getPromotions, deletePromotion, duplicatePromotion, updatePromotion } from "../actions/promotionActions";
+
 import useStyles from "./Promotions.css";
 import { Paper } from "@material-ui/core";
-import { sizing } from "@material-ui/system";
 
-// TODO: clean code and rearange by best practice
 const PromotionsTable = (props) => {
-    const promotions = useSelector((state) => state.promotion.promotions);
-
-    // TODO: get columns
-    //const { columns } = useSelector((state) => state.columns);
     const dispatch = useDispatch();
-
-    const handleOnClick = (id) => {
-        dispatch(deletePromotion(id));
-    };
+    const { promotions } = useSelector((state) => state.promotion);
+    const { columns } = useSelector((state) => state.promotion);
 
     useEffect(() => {
         dispatch(getPromotions());
+        dispatch(getColumns());
     }, [dispatch]);
+
+    const handleDeleteRow = (id) => {
+        return dispatch(deletePromotion(id));
+    };
+
+    const handleDuplicateRow = (id, index) => {
+        const promotion = promotions.find(curr => curr._id === id);
+        return dispatch(duplicatePromotion(promotion, index));
+    }
+
+    const handleRowUpdate = (updatedRow) => {
+        return dispatch(updatePromotion(updatedRow));
+    }
 
     const classes = useStyles();
 
-    // TODO: format date to dd/mm/yyyy
     return (
-        <Paper style={{ height: 650, width: '100%' }}>
+        <Paper className={classes.root}>
             <VirtualizedTable
-                rowCount={promotions.length}
                 rowGetter={({ index }) => promotions[index]}
                 columns={columns}
+                rows={promotions}
+                hasCheckbox
+                onRowUpdate={handleRowUpdate}
+                onRowDelete={handleDeleteRow}
+                onRowDuplicate={handleDuplicateRow}
             />
         </Paper>
     );
 };
 
 export default PromotionsTable;
-
-{/* <DataGrid
-className={classes.table}
-density={"dense"}
-rows={promotions}
-columns={columns}
-pageSize={12}
-//loading={!isLoaded}
-checkboxSelection
-onSelectionChange={() => {
-    return;
-}} 
-/> */}

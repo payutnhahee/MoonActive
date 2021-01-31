@@ -38,6 +38,7 @@ const VirtualizedTable = ({
             setChecked(old => old.filter(row => row !== rowData._id));
     };
 
+    // tableactions
     const toggleRowEdit = (rowIndex, rowData) => {
         setEditedRow(rowData);
         return Promise.resolve();
@@ -54,7 +55,7 @@ const VirtualizedTable = ({
         setEditedRow({ _id: -1 });
     }
 
-    const EditableCell = ({ dataKey }) => {
+    const renderEditableCell = (dataKey) => {
         const onFieldChange = (newValue, dataKey) => {
             setEditedRow(state => {
                 return { ...state, [dataKey]: newValue };
@@ -69,12 +70,12 @@ const VirtualizedTable = ({
         )
     }
 
-    const cellRenderer = (props) => {
+    const renderCell = (props) => {
         const { cellData, columnType, columnIndex, rowData, dataKey } = props;
         const offset = hasCheckbox ? 1 : 0;
 
         if (rowData._id === editedRow._id) {
-            return <EditableCell dataKey={dataKey} />;
+            return renderEditableCell(dataKey);
         }
 
         return (
@@ -93,7 +94,7 @@ const VirtualizedTable = ({
         );
     };
 
-    const headerRenderer = ({ label, columnIndex }) => {
+    const renderHeader = ({ label, columnIndex }) => {
         return (
             <TableCell
                 component="div"
@@ -111,7 +112,7 @@ const VirtualizedTable = ({
         );
     };
 
-    const checkboxColumnRenderer = () => {
+    const renderCheckboxColumn = () => {
         return (
             <Column
                 disableSort
@@ -137,7 +138,7 @@ const VirtualizedTable = ({
         )
     }
  
-    const actionsColumnRenderer = () => {
+    const renderActionsColumn = () => {
         return (
             <Column
                 disableSort
@@ -175,20 +176,20 @@ const VirtualizedTable = ({
                     rowGetter={rowGetter}
                     {...tableProps}
                 >
-                    {hasCheckbox && checkboxColumnRenderer()}
+                    {hasCheckbox && renderCheckboxColumn()}
                     {columns.map(({ dataKey, type, ...other }, index) => {
                         return (
                             <Column
                                 key={dataKey}
                                 className={classes.flexContainer}
                                 cellRenderer={(cellProps) => 
-                                    cellRenderer({
+                                    renderCell({
                                         columnType: type, 
                                         ...cellProps
                                     })}
                                 dataKey={dataKey}
                                 headerRenderer={(headerProps) =>
-                                    headerRenderer({
+                                    renderHeader({
                                         ...headerProps,
                                         columnIndex: index
                                     })}
@@ -196,7 +197,7 @@ const VirtualizedTable = ({
                             />
                         );
                     })}
-                    {actionsColumnRenderer()}
+                    {renderActionsColumn()}
                 </Table>
             )}
         </AutoSizer>

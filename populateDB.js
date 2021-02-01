@@ -17,64 +17,12 @@ function getRandomDate(date1, date2) {
     }
 }
 
-const hardcoded_promotions = [
-    {
-        name: "Christmas",
-        type: "Common",
-        startDate: getRandomDate(),
-        endDate: getRandomDate(),
-        userGroupName: "A",
-    },
-    {
-        name: "Black Friday",
-        type: "Common",
-        startDate: getRandomDate(),
-        endDate: getRandomDate(),
-        userGroupName: "B",
-    },
-    {
-        name: "Hannukah",
-        type: "Basic",
-        startDate: getRandomDate(),
-        endDate: getRandomDate(),
-        userGroupName: "A",
-    },
-    {
-        name: "Rosh Hashana",
-        type: "Basic",
-        startDate: getRandomDate(),
-        endDate: getRandomDate(),
-        userGroupName: "C",
-    },
-    {
-        name: "Passover",
-        type: "Epic",
-        startDate: getRandomDate(),
-        endDate: getRandomDate(),
-        userGroupName: "C",
-    },
-    {
-        name: "Easter",
-        type: "Epic",
-        startDate: getRandomDate(),
-        endDate: getRandomDate(),
-        userGroupName: "B",
-    },
-    {
-        name: "Thanksgiving",
-        type: "Basic",
-        startDate: getRandomDate(),
-        endDate: getRandomDate(),
-        userGroupName: "A",
-    },
-];
-
 const promoNames = ['Thanksgiving', 'Christmas', 'Hannukah', 'Easter', 'Rosh Hashana', 'Purim', 'Halloween', 'Passover'];
 const types = ['Basic', 'Epic', 'Common'];
 const userGroups = ['A', 'B', 'C', 'D'];
 const promotions = [];
 
-for (let i = 0; i<100; i++) {
+for (let i = 0; i<10000; i++) {
     promotions.push({
         name: promoNames[i%8] + getRandomValue(),
         type: types[i%3],
@@ -87,10 +35,7 @@ for (let i = 0; i<100; i++) {
 db.promotions.deleteMany({});
 db.columns.deleteMany({});
 
-// Manual init
 db.getCollection("promotions").insertMany(promotions);
-
-
 db.getCollection("columns").insertMany([
     {
         label: "Name",

@@ -53,6 +53,7 @@ const VirtualizedTable = ({
 
     const handleEditCancel = () => {
         setEditedRow({ _id: -1 });
+        return Promise.resolve();
     }
 
     const renderEditableCell = (dataKey) => {

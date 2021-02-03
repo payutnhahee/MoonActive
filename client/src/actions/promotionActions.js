@@ -8,14 +8,6 @@ import {
     PROMOTIONS_LOADING,
 } from "./actionTypes";
 
-const convertStringstoDates = (promotions) => {
-    return promotions.map((promotion) => {
-        promotion.startDate = new Date(promotion.startDate);
-        promotion.endDate = new Date(promotion.endDate);
-        return promotion;
-    })
-}
-
 export const getPromotions = () => async (dispatch) => {
     dispatch(setPromotionsLoading());
     try {
